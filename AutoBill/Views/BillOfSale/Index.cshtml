@@ -1,0 +1,152 @@
+﻿@model AutoBill.Models.AutoSaleBillViewModels.SaleBillViewModel
+
+@{
+    ViewData["Title"] = "Autmative Bill Sale";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Save" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Customer.FirstName" class="control-label"></label>
+                <input asp-for="Customer.FirstName" class="form-control" />
+                <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.LastName" class="control-label"></label>
+                <input asp-for="Customer.LastName" class="form-control" />
+                <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Address" class="control-label"></label>
+                <input asp-for="Customer.Address" class="form-control" />
+                <span asp-validation-for="Customer.Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Car.MakeId" class="control-label"></label>
+                <select asp-for="Car.MakeId" id="MakeId" name="Car.MakeId" asp-items= "@Model.Makes"  class="form-control"></select>
+                <span asp-validation-for="Car.MakeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.ModelId" class="control-label"></label>
+                <select asp-for="Car.ModelId" id="ModelId" name="Car.ModelId" asp-items="@(new SelectList(string.Empty,"ModelId", "ModelName"))" class="form-control"></select>
+                <span asp-validation-for="Car.ModelId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.BodyTypeId" class="control-label"></label>
+                <select asp-for="Car.BodyTypeId" name="Car.BodyTypeId" asp-items="Model.BodyTypes" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.Year" class="control-label"></label>
+                <input asp-for="Car.Year" class="form-control" />
+                <span asp-validation-for="Car.Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.Odometer" class="control-label"></label>
+                <input asp-for="Car.Odometer" class="form-control" />
+                <span asp-validation-for="Car.Odometer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Car.Kilometres" /> @Html.DisplayNameFor(model => model.Car.Kilometres)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.VIN" class="control-label"></label>
+                <input asp-for="Car.VIN" class="form-control" />
+                <span asp-validation-for="Car.VIN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Car.Color" class="control-label"></label>
+                <input asp-for="Car.Color" class="form-control" />
+                <span asp-validation-for="Car.Color" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Insurance.InsuranceName" class="control-label"></label>
+                <input asp-for="Insurance.InsuranceName" class="form-control" />
+                <span asp-validation-for="Insurance.InsuranceName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleBill.Price" class="control-label"></label>
+                <input asp-for="SaleBill.Price" class="form-control" />
+                <span asp-validation-for="SaleBill.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleBill.Tax" class="control-label"></label>
+                <input asp-for="SaleBill.Tax" class="form-control" />
+                <span asp-validation-for="SaleBill.Tax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleBill.SalesTax" class="control-label"></label>
+                <input asp-for="SaleBill.SalesTax" class="form-control" />
+                <span asp-validation-for="SaleBill.SalesTax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleBill.PaymentForm" class="control-label"></label>
+                <input asp-for="SaleBill.PaymentForm" class="form-control" />
+                <span asp-validation-for="SaleBill.PaymentForm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaleBill.Total" class="control-label"></label>
+                <input asp-for="SaleBill.Total" class="form-control" />
+                <span asp-validation-for="SaleBill.Total" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $("#MakeId").on("change", function () { 
+        //var t = $("#MakeId :selected").text(); // The text content of the selected option
+        var value = $("#MakeId").val(); // The value of the selected option
+
+        $.ajax(
+            {
+                url: '/BillOfSale/ModelsList?makeId=' + value,
+                type: 'GET',
+                data: "",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var items = '';
+                    $("#ModelId").empty();
+                    $.each(data, function (i, model) {
+                        items += "<option value='" + model.value + "'>" + model.text + "</option>";
+                    });
+
+                    $('#ModelId').html(items);
+                },
+                error: function () {
+                    //alert("error");
+                }
+            }); 
+        });
+</script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            var items = "<option value='0'>Select</option>";
+            $('#ModelId').html(items);
+        });
+</script>
+
+}
+
