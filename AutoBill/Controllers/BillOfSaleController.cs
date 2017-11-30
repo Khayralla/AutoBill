@@ -29,6 +29,7 @@ namespace AutoBill.Controllers
 
         public BillOfSaleController(IBillService billService, 
                                     UserManager<ApplicationUser> userManager, 
+
                                     ILogger<AccountController> logger, 
                                     INodeServices nodeServices, 
                                     IEmailSender emailSender, 
