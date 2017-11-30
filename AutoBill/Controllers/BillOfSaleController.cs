@@ -27,8 +27,12 @@ namespace AutoBill.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IEmailConfiguration _emailConfiguration;
 
-        public BillOfSaleController(IBillService billService, UserManager<ApplicationUser> userManager, ILogger<AccountController> logger, 
-                                    INodeServices nodeServices, IEmailSender emailSender, IEmailConfiguration emailConfiguration)
+        public BillOfSaleController(IBillService billService, 
+                                    UserManager<ApplicationUser> userManager, 
+                                    ILogger<AccountController> logger, 
+                                    INodeServices nodeServices, 
+                                    IEmailSender emailSender, 
+                                    IEmailConfiguration emailConfiguration)
         {
             _billService = billService;
             _userManager = userManager;
