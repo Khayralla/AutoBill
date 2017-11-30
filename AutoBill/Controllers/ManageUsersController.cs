@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace AutoBill.Controllers
 {
     [Authorize(Roles = Constants.AdministratorRole)]
-    public class ManageUsersController : Controller
+    public class ManageUsersController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         //private readonly ILogger _logger;

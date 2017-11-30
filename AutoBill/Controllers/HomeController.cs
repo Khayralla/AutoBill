@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AutoBill.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
 

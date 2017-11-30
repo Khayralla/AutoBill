@@ -18,7 +18,7 @@ namespace AutoBill.Controllers
 {
     [Authorize]
     [Route("BillOfSale")]
-    public class BillOfSaleController : Controller
+    public class BillOfSaleController : BaseController
     {
         private readonly IBillService _billService;
         private readonly UserManager<ApplicationUser> _userManager;

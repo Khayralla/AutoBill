@@ -1,0 +1,13 @@
+C:\dev\AutoBillSolution\AutoBill\bin\Debug\netcoreapp2.0\app.db
+C:\dev\AutoBillSolution\AutoBill\bin\Debug\netcoreapp2.0\AutoBill.deps.json
+C:\dev\AutoBillSolution\AutoBill\bin\Debug\netcoreapp2.0\AutoBill.runtimeconfig.json
+C:\dev\AutoBillSolution\AutoBill\bin\Debug\netcoreapp2.0\AutoBill.runtimeconfig.dev.json
+C:\dev\AutoBillSolution\AutoBill\bin\Debug\netcoreapp2.0\AutoBill.dll
+C:\dev\AutoBillSolution\AutoBill\bin\Debug\netcoreapp2.0\AutoBill.pdb
+C:\dev\AutoBillSolution\AutoBill\obj\Debug\netcoreapp2.0\AutoBill.csprojResolveAssemblyReference.cache
+C:\dev\AutoBillSolution\AutoBill\obj\Debug\netcoreapp2.0\AutoBill.csproj.CoreCompileInputs.cache
+C:\dev\AutoBillSolution\AutoBill\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\dev\AutoBillSolution\AutoBill\obj\Debug\netcoreapp2.0\AutoBill.AssemblyInfoInputs.cache
+C:\dev\AutoBillSolution\AutoBill\obj\Debug\netcoreapp2.0\AutoBill.AssemblyInfo.cs
+C:\dev\AutoBillSolution\AutoBill\obj\Debug\netcoreapp2.0\AutoBill.dll
+C:\dev\AutoBillSolution\AutoBill\obj\Debug\netcoreapp2.0\AutoBill.pdb
