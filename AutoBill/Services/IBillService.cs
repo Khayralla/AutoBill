@@ -16,6 +16,8 @@ namespace AutoBill.Services
 
         Task<List<Model>> GetModelsAsync(int makeId);
 
+        Task<List<SelectListItem>> GetSelectListModelsAsync(int makeId);
+
         Task<Model> GetModelAsync(int makeId, int modelId);
 
         Task<Model> SaveModelAsync(int makeId, string modelName);

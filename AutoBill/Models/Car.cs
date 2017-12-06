@@ -14,19 +14,19 @@ namespace AutoBill.Models
         [DisplayName("VIN")]
         public string VIN { get; set; }
 
-        // e.g. Volkswagon, Ford, Toyota
-        [Required(ErrorMessage = "Make required")]
-        [DisplayName("Make")]
-        public int MakeId { get; set; }
-
         //e.g. 1994
         [Required(ErrorMessage = "Year required")]
         [DisplayName("Year")]
         public int Year { get; set; } = DateTime.Now.Year;
 
+        // e.g. Volkswagon, Ford, Toyota
+        [Required(ErrorMessage = "Make required")]
+        [DisplayName("Make")]
+        public int MakeId { get; set; }
+
         //e.g. Jetta, Taurus, Corolla
         [DisplayName("Model")]
-        public int ModelId { get; set; } = 0;
+        public int ModelId { get; set; }
 
         //e.g. 4 dr Sedan, pickup
         [DisplayName("BodyType")]

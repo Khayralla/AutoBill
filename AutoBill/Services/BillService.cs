@@ -67,6 +67,15 @@ namespace AutoBill.Services
                                  .ToListAsync();
         }
 
+        public async Task<List<SelectListItem>> GetSelectListModelsAsync(int makeId)
+        {
+            return await _context.Models
+                                 .Where(m => m.MakeId == makeId)
+                                 .OrderBy(m => m.ModelName)
+                                 .Select(m => new SelectListItem { Value = m.ModelId.ToString(), Text = m.ModelName })
+                                 .ToListAsync();
+        }
+
         public async Task<Model> GetModelAsync(int makeId, int modelId)
         {
             return await _context.Models
@@ -155,6 +164,7 @@ namespace AutoBill.Services
 
         public async Task<Customer> GetCustomerAsync(long customerId)
         {
+            var customers = await _context.Customers.ToListAsync();
             return await _context.Customers
                                  .Where(c => c.Id == customerId)
                                  .FirstOrDefaultAsync();
@@ -175,6 +185,8 @@ namespace AutoBill.Services
 
         public async Task<Insurance> GetInsuranceAsync(int insuranceId)
         {
+            var insurances = await _context.Insurances.ToListAsync();
+
             return await _context.Insurances
                                  .Where(c => c.Id == insuranceId)
                                  .FirstOrDefaultAsync();

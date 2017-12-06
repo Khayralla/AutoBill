@@ -1,7 +1,8 @@
 ﻿@model AutoBill.Models.AutoSaleBillViewModels.SaleBillViewModel
+@using AutoBill.Models
 
 @{
-    ViewData["Title"] = "Autmative Bill Sale";
+    ViewData["Title"] = "Automative Bill Sale";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -29,8 +30,14 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="Car.VIN" class="control-label"></label>
+                <input asp-for="Car.VIN" id="VIN" class="form-control" />
+                <span asp-validation-for="Car.VIN" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="Car.MakeId" class="control-label"></label>
-                <select asp-for="Car.MakeId" id="MakeId" name="Car.MakeId" asp-items= "@Model.Makes"  class="form-control"></select>
+                <select asp-for="Car.MakeId" id="MakeId" name="Car.MakeId" asp-items= "@Model.Makes" class="form-control"></select>
                 <span asp-validation-for="Car.MakeId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -59,11 +66,7 @@
                     </label>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Car.VIN" class="control-label"></label>
-                <input asp-for="Car.VIN" class="form-control" />
-                <span asp-validation-for="Car.VIN" class="text-danger"></span>
-            </div>
+           
             <div class="form-group">
                 <label asp-for="Car.Color" class="control-label"></label>
                 <input asp-for="Car.Color" class="form-control" />
@@ -118,7 +121,6 @@
     $("#MakeId").on("change", function () { 
         //var t = $("#MakeId :selected").text(); // The text content of the selected option
         var value = $("#MakeId").val(); // The value of the selected option
-
         $.ajax(
             {
                 url: '/BillOfSale/ModelsList?makeId=' + value,
@@ -148,5 +150,55 @@
         });
 </script>
 
+<script type="text/javascript">
+        $('#VIN').change(function () {
+            var vin = $('#VIN').val();
+            if (vin.length = 17) {
+                $.ajax(
+                    {
+                        url: '/BillOfSale/GetCarByVIN?vin=' + vin,
+                        type: 'GET',
+                        jsondata: "",
+                        datatype: 'json',
+                        success: function (jsondata) {
+                            //debugger;
+                            if (jsondata == null) {
+                                var items = "<option value='0'>Select</option>";
+                                $('#MakeId').html(items);
+                                $('#ModelId').html(items);
+                            }
+                            else {
+                                $('#Car.Color').val(jsondata.color);
+                                $('#Car.Year').val(jsondata.year);
+                                $('#Car.Odometer').val(jsondata.odometer);
+                                $('#Car.Kilometres').prop('checked', jsondata.kilometres);                                
+                                $('#Car.MakeId').val(jsondata.makeId);
+                                
+                                $("#MakeId option").each(function () {
+                                    this.selected = $(this).val() == jsondata.makeId;
+                                });
+
+                                var items = '';
+                                $("#ModelId").empty();
+                                $.each(jsondata.models, function (i, model) {
+                                    items += "<option value='" + model.value + "'>" + model.text + "</option>";
+                                });
+
+                                $('#ModelId').html(items);
+
+                                $("#ModelId option").each(function () {
+                                    this.selected = $(this).val() == jsondata.modelId;
+                                });
+
+                                $('#Car.ModelId').val(jsondata.modelId);
+                            }
+                        },
+                        error: function () {
+                            //alert("error");
+                        }
+                    }); 
+            }
+        });
+</script>
 }
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,6 +19,8 @@ namespace AutoBill.Models.AutoSaleBillViewModels
        // [StringLength(50, ErrorMessage = "Make cannot be longer than 50 characters.", MinimumLength = 1)]
         [DisplayName("Make")]
         public int MakeId { get; set; }
+
+        public string MakeName { get; set; }
 
         //e.g. Jetta, Taurus, Corolla
         [Required(ErrorMessage = "Model required")]
@@ -45,5 +49,7 @@ namespace AutoBill.Models.AutoSaleBillViewModels
         [StringLength(20, ErrorMessage = "Color cannot be longer than 20 characters.", MinimumLength = 1)]
         [DisplayName("Color")]
         public string Color { get; set; }
+
+        public List<SelectListItem> Models { get; set; } = new List<SelectListItem>();
     }
 }

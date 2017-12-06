@@ -51,13 +51,8 @@ namespace AutoBill.Controllers
             if (currentUser == null)
                 return Challenge();
 
-            //
-           
-
-
             var saleBill = new SaleBillViewModel
             {
-                
                 Makes = await _billService.GetMakesAsync(),
                 Car = new CarViewModel(),
                 BodyTypes = await _billService.GetBodyTypesAsync()
@@ -185,5 +180,33 @@ namespace AutoBill.Controllers
 
             }
         }
+
+        [HttpGet("{vin}")]
+        [Route("GetCarByVIN")]
+        public async Task<JsonResult> GetCarByVIN([FromQuery]string vin)
+        {
+            CarViewModel carViewModel = null;
+            var car = await _billService.GetCarByVinAsync(vin);
+            if (car != null)
+            {
+                carViewModel = new CarViewModel
+                {
+                    BodyTypeId = car.BodyTypeId,
+                    Color = car.Color,
+                    Kilometres = car.Kilometres,
+                    MakeId = car.MakeId,
+                    ModelId = car.ModelId,
+                    Odometer = car.Odometer,
+                    VIN = car.VIN,
+                    Year = car.Year
+                };
+
+                carViewModel.Models = await _billService.GetSelectListModelsAsync(carViewModel.MakeId);
+            }
+
+            var temp = Json(carViewModel);
+            return temp;
+        }
+
     }
 }
