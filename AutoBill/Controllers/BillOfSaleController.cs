@@ -56,7 +56,6 @@ namespace AutoBill.Controllers
                 Makes = await _billService.GetMakesAsync(),
                 Car = new CarViewModel(),
                 BodyTypes = await _billService.GetBodyTypesAsync()
-                //CarTradeWith = new CarViewModel {  MakeId = 0, ModelId = 0}
             };
 
             saleBill.Makes.Insert(0, new SelectListItem { Value = "0", Text = "Select" });

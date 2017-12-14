@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace AutoBill.Controllers
 {
     [Authorize(Roles = Constants.AdministratorRole)]
+    [Route("ManageUsers")]
     public class ManageUsersController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -20,6 +21,8 @@ namespace AutoBill.Controllers
             _userManager = userManager;
         }
 
+        [Route("")] // Combines to define the route template "ManageUsers"
+        [Route("Index")] // Combines to define the route template "ManageUsers/Index"
         public async Task<IActionResult> Index()
         {
             var admins = await _userManager.GetUsersInRoleAsync(Constants.AdministratorRole);
@@ -36,6 +39,7 @@ namespace AutoBill.Controllers
         }
 
         [HttpPost]
+        [Route("Register")]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -65,6 +69,27 @@ namespace AutoBill.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpDelete("{email}")]
+        [Route("Delete")]
+        public async Task<IActionResult> Delete([FromQuery]string email)
+        {
+            if (!string.IsNullOrEmpty(email))
+            {
+                var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
+                if (user != null)
+                {
+                    var admins = await _userManager.GetUsersInRoleAsync(Constants.AdministratorRole);
+
+                    // make sure we are not deleteing admin account.
+                    var admin = admins.FirstOrDefault(a => a.Email == email);
+                    if (admin == null)
+                        await _userManager.DeleteAsync(user);
+                }
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

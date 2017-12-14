@@ -8,11 +8,25 @@ namespace AutoBill.Services
 {
     public interface IBillService
     {
-        Task<List<SelectListItem>> GetMakesAsync();
+        #region Make
+
+        Task<bool> MakeExists(int id);
 
         Task<Make> GetMakeAsync(int makeId);
 
+        Task<Make> GetMakeAsync(string makeName);
+
+        Task<List<SelectListItem>> GetMakesAsync();
+
+        Task<IEnumerable<Make>> GetMakesListAsync();
+
         Task<Make> SaveMakeAsync(string makeName);
+
+        Task<bool> UpdateMakeAsync(Make make);
+
+        Task<bool> DeleteMakeAsync(int id);
+
+        #endregion Make
 
         Task<List<Model>> GetModelsAsync(int makeId);
 

@@ -19,19 +19,16 @@ namespace AutoBill.Services
             _context = context;
         }
 
-        public async Task<List<SelectListItem>> GetMakesAsync()
+        #region Make
+
+        public async Task<bool> MakeExists(int id)
         {
-            return await _context.Makes
-                                 .OrderBy(m => m.MakeName)
-                                 .Select(m => new SelectListItem {  Value = m.MakeId.ToString(), Text = m.MakeName})
-                                 .ToListAsync();
+            return await _context.Makes.AnyAsync(e => e.MakeId == id);
         }
 
-        public async Task<Make> GetMakeAsync(int makeId)
+        public async Task<Make> GetMakeAsync(int id)
         {
-                return await _context.Makes
-                                     .Where(c => c.MakeId == makeId)
-                                     .SingleOrDefaultAsync();
+            return await _context.Makes.SingleOrDefaultAsync(c => c.MakeId == id);
         }
 
         public async Task<Make> GetMakeAsync(string makeName)
@@ -42,6 +39,21 @@ namespace AutoBill.Services
                                      .SingleOrDefaultAsync();
 
             return null;
+        }
+
+        public async Task<List<SelectListItem>> GetMakesAsync()
+        {
+            return await _context.Makes
+                                 .OrderBy(m => m.MakeName)
+                                 .Select(m => new SelectListItem {  Value = m.MakeId.ToString(), Text = m.MakeName})
+                                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Make>> GetMakesListAsync()
+        {
+            return await _context.Makes
+                                 .OrderBy(m => m.MakeName)
+                                 .ToListAsync();
         }
 
         public async Task<Make> SaveMakeAsync(string makeName)
@@ -58,6 +70,31 @@ namespace AutoBill.Services
 
             return null;
         }
+
+        public async Task<bool> UpdateMakeAsync(Make make)
+        {
+            if (make != null)
+            {
+                _context.Makes.Update(make);
+                return await _context.SaveChangesAsync() == 1;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteMakeAsync(int id)
+        {
+            var make = await GetMakeAsync(id);
+            if(make != null)
+            {
+                _context.Makes.Remove(make);
+                return await _context.SaveChangesAsync() == 1;
+            }
+
+            return false;
+        }
+
+        #endregion Make
 
         public async Task<List<Model>> GetModelsAsync(int makeId)
         {

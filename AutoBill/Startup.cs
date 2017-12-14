@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -76,7 +77,10 @@ namespace AutoBill
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddNodeServices();// this is in package Microsoft.AspNetCore.NodeServices
-            services.AddMvc();
+            //services.AddMvc();
+
+            services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+
             services.AddScoped<IBillService, BillService>();
 
             services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
