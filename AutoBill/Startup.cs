@@ -108,7 +108,7 @@ namespace AutoBill
             // Make sure there's a test admin account
             EnsureRolesAsync(roleManager).Wait();
             EnsureTestAdminAsync(userManager).Wait();
-            DatabaseSetup.EnsureDatabaseNotEmptyAsync().Wait();
+            //DatabaseSetup.EnsureDatabaseNotEmptyAsync().Wait();
             app.UseStaticFiles();
 
             app.UseAuthentication();

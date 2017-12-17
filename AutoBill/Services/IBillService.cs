@@ -28,19 +28,45 @@ namespace AutoBill.Services
 
         #endregion Make
 
+        #region Model
+
+        Task<bool> ModelExists(int modelId);
+
+        Task<Model> GetModelAsync(int modelId);
+
+        Task<List<Model>> GetModelsAsync();
+
         Task<List<Model>> GetModelsAsync(int makeId);
 
         Task<List<SelectListItem>> GetSelectListModelsAsync(int makeId);
 
         Task<Model> GetModelAsync(int makeId, int modelId);
 
-        Task<Model> SaveModelAsync(int makeId, string modelName);
+        Task<Model> AddModelAsync(Model model);
+
+        Task<Model> UpdateModelAsync(Model model);
+
+        Task<bool> DeleteModelAsync(int modelId);
+
+        #endregion Model
+
+        #region Body Types
+
+        Task<bool> BodyTypeExistsAsync(int id);
+
+        Task<List<BodyType>> GetBodyTypesListAsync();
 
         Task<List<SelectListItem>> GetBodyTypesAsync();
 
-        Task<BodyType> GetBodyTypeAsync(int bodyTypeId);
+        Task<BodyType> GetBodyTypeAsync(int id);
 
-        Task<BodyType> SaveBodyTypeAsync(string bodyTypeName);
+        Task<bool> AddBodyTypeAsync(BodyType bodyType);
+
+        Task<bool> UpdateBodyTypeAsync(BodyType bodyType);
+
+        Task<bool> DeleteBodyTypeAsync(int id);
+
+        #endregion Body Types
 
         Task<Car> GetCarByVinAsync(string vin);
 

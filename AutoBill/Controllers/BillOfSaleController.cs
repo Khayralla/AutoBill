@@ -99,7 +99,7 @@ namespace AutoBill.Controllers
                     {
                         var id = await _billService.SaveSaleBillAsync(saleBillViewModel, currentUser);
                         if (id != -1)
-                            return RedirectToAction(actionName: nameof(CreatePdf), routeValues: new { id = id });
+                            return RedirectToAction(actionName: nameof(CreatePdf), routeValues: new {  id });
                     }
                     else
                         return RedirectToAction(actionName: nameof(CreatePdf), routeValues: new { id = sb.Id });
@@ -122,6 +122,7 @@ namespace AutoBill.Controllers
             return View(saleBillViewModel);
         }
 
+        // see  http://www.c-sharpcorner.com/article/basic-pdf-export-using-jquery-in-asp-net-mvc-razor/
         [HttpGet("{id}")]
         [Route("CreatePdf")]
         public async Task<IActionResult> CreatePdf([FromQuery] int id)

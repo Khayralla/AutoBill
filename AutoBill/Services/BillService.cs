@@ -96,6 +96,59 @@ namespace AutoBill.Services
 
         #endregion Make
 
+        #region Model
+
+        public async Task<bool> ModelExists(int modelId)
+        {
+            return await _context.Models.AnyAsync(e => e.ModelId == modelId);
+        }
+
+        public async Task<Model> GetModelAsync(int modelId)
+        {
+            return await _context.Models.SingleOrDefaultAsync(m => m.ModelId == modelId);
+        }
+
+        public async Task<List<Model>> GetModelsAsync()
+        {
+            return await _context.Models
+                            .Join(_context.Makes,
+                                  d => d.MakeId,
+                                  k => k.MakeId,
+                                  (d, k) => new Model
+                                  {
+                                      MakeId = d.MakeId,
+                                      MakeName = k.MakeName,
+                                      ModelId = d.ModelId,
+                                      ModelName = d.ModelName
+                                  }
+                                  )
+                                  .OrderBy(d => d.ModelName)
+                                  .OrderBy(k => k.MakeName)
+                            .ToListAsync();
+        }
+
+        /*
+         * 
+         var query_where3 = from k in Makes
+                    join d in Models
+                    on k.MakeId equals d.MakeId
+                    
+                    select new
+                    {
+					MakeId = d.MakeId,
+					MakeName = k.MakeName,
+					ModelId = d.ModelId,
+                     ModelName = d.ModelName,
+                     
+                    };
+
+foreach (var c in query_where3)
+ {
+  System.Console.WriteLine(c.MakeId + "   Make: " + c.ModelName + "\t\t\t" + c.ModelId  + "    Model: " + c.MakeName  );
+ }
+
+         * 
+         */
         public async Task<List<Model>> GetModelsAsync(int makeId)
         {
             return await _context.Models
@@ -120,11 +173,10 @@ namespace AutoBill.Services
                                  .SingleOrDefaultAsync();
         }
 
-        public async Task<Model> SaveModelAsync(int makeId, string modelName)
+        public async Task<Model> AddModelAsync(Model model)
         {
-            if (modelName != null)
+            if (model != null)
             {
-                var model = new Model { MakeId = makeId, ModelName = modelName };
                 await _context.Models.AddAsync(model);
 
                 var saveResult = await _context.SaveChangesAsync();
@@ -135,6 +187,48 @@ namespace AutoBill.Services
             return null;
         }
 
+        public async Task<Model> UpdateModelAsync(Model model)
+        {
+            if (model != null)
+            {
+                _context.Models.Update(model);
+                var saveResult = await _context.SaveChangesAsync();
+                if (saveResult == 1)
+                    return model;
+            }
+
+            return null;
+        }
+
+        public async Task<bool> DeleteModelAsync(int modelId)
+        {
+            var model = await GetModelAsync(modelId);
+            if (model != null)
+            {
+                _context.Models.Remove(model);
+                var saveResult = await _context.SaveChangesAsync();
+                return saveResult == 1;
+            }
+
+            return false;
+        }
+
+        #endregion Model
+
+        #region Body Types
+
+        public async Task<bool> BodyTypeExistsAsync(int id)
+        {
+            return await _context.BodyTypes.AnyAsync(e => e.BodyTypeId == id);
+        }
+
+        public async Task<List<BodyType>> GetBodyTypesListAsync()
+        {
+            return await _context.BodyTypes
+                                 .OrderBy(m => m.BodyTypeName)
+                                 .ToListAsync();
+        }
+
         public async Task<List<SelectListItem>> GetBodyTypesAsync()
         {
             return await _context.BodyTypes
@@ -143,27 +237,51 @@ namespace AutoBill.Services
                                  .ToListAsync();
         }
 
-        public async Task<BodyType> GetBodyTypeAsync(int bodyTypeId)
+        public async Task<BodyType> GetBodyTypeAsync(int id)
         {
-                return await _context.BodyTypes
-                                     .Where(b => b.BodyTypeId == bodyTypeId)
-                                     .SingleOrDefaultAsync();
+            return await _context.BodyTypes
+                                 .SingleOrDefaultAsync(b => b.BodyTypeId == id);
         }
 
-        public async Task<BodyType> SaveBodyTypeAsync(string bodyTypeName)
+        public async Task<bool> AddBodyTypeAsync(BodyType bodyType)
         {
-            if (bodyTypeName != null)
+            if (bodyType != null)
             {
-                var bodyType = new BodyType { BodyTypeName = bodyTypeName };
-                await _context.BodyTypes.AddAsync(bodyType);
+                var exists = await _context.BodyTypes.AnyAsync(b => b.BodyTypeName.Trim().ToUpperInvariant() == bodyType.BodyTypeName.Trim().ToUpperInvariant());
+                if (exists)
+                    return true;
 
+                await _context.BodyTypes.AddAsync(bodyType);
                 var saveResult = await _context.SaveChangesAsync();
-                if (saveResult == 1)
-                    return bodyType;
+                return saveResult == 1;
             }
 
-            return null;
+            return false;
         }
+
+        public async Task<bool> UpdateBodyTypeAsync(BodyType bodyType)
+        {
+            if (bodyType != null)
+            {
+                _context.BodyTypes.Update(bodyType);
+                return await _context.SaveChangesAsync() == 1;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteBodyTypeAsync(int id)
+        {
+            var bodyType = await GetBodyTypeAsync(id);
+            if (bodyType != null)
+            {
+                _context.BodyTypes.Remove(bodyType);
+                return 1 == await _context.SaveChangesAsync();
+            }
+            return false;
+        }
+
+        #endregion Body Types
 
         public async Task<Car> GetCarByVinAsync(string vin)
         {

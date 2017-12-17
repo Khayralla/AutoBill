@@ -13,6 +13,9 @@ namespace AutoBill.Models
 
         public int MakeId { get; set; }
 
+        [NotMapped]
+        public string MakeName { get; set; }
+
         [Required(ErrorMessage = "Model required")]
         [StringLength(50, ErrorMessage = "Model name cannot be longer than 50 characters.", MinimumLength = 1)]
         [DisplayName("Model")]
